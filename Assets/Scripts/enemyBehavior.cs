@@ -7,7 +7,13 @@ public class enemyBehavior : MonoBehaviour
     private NavMeshAgent enemyNavMesh;
     [SerializeField] private Transform playerTransform;
     [SerializeField] private float followDistance = 1100f; 
-    [SerializeField] private float lookRotationSpeed = 2f; 
+    [SerializeField] private float lookRotationSpeed = 2f;
+
+    public enemyBehavior(float lookRotationSpeed)
+    {
+        this.lookRotationSpeed = lookRotationSpeed;
+    }
+
     private Vector3 originalPosition; 
     private bool FollowingPlayer = false; 
 
@@ -39,5 +45,9 @@ public class enemyBehavior : MonoBehaviour
             
    
         }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        enemyNavMesh.isStopped = false;
     }
 }

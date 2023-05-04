@@ -16,12 +16,15 @@ public class PlayerScript : MonoBehaviour
     private Vector3 playerMovement;
     private Vector3 playerRunMovement;
     private bool isMovimentPressed;
+    private bool isFirepressed;
     private float rotationVelocity = 5.0f;
 
     private bool isRunningPressed;
 
+    [SerializeField] private float gravitValue = -9.81f;
     [SerializeField] private float velocity;
     [SerializeField] private float runMultipleVelocity = 3;
+    [SerializeField] private Gun gun;
 
 
     private void Awake()
@@ -37,6 +40,7 @@ public class PlayerScript : MonoBehaviour
 
         playerInput.Movement.Run.started += OnRunningInput;
         playerInput.Movement.Run.canceled += OnRunningInput;
+        playerInput.Movement.Fire.started += onFireInput;
 
     }
 
@@ -61,8 +65,21 @@ public class PlayerScript : MonoBehaviour
     {
         isRunningPressed = context.ReadValueAsButton();
     }
+    void onFireInput(InputAction.CallbackContext context)
+    {
+        isFirepressed = context.ReadValueAsButton();
+        Fire();
+    }
 
-    // Update is called once per frame
+    private void Fire()
+    {
+        if (isFirepressed)
+        {
+            gun.Fire();
+
+        }
+    }
+
     void Update()
     {
         MovePlayer();
@@ -116,6 +133,7 @@ public class PlayerScript : MonoBehaviour
         if (isRunningPressed)
         {
             characterController.Move(playerRunMovement * Time.deltaTime * velocity);
+            playerRunMovement.y += gravitValue * Time.deltaTime;
         }
         else
         {
